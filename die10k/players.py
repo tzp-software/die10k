@@ -7,6 +7,7 @@
     __date__ = '05-25-2013, Sat, 2:06 AM'
 '''
 from dice import Roll, Die
+from abc import abstractmethod
 
 class Player(object):
     ''' a Player keeps track of individual player stats,
@@ -48,8 +49,10 @@ class Player(object):
 
     def __add__(self, other):
         self.add_score(other)
-
-
+    
+    @abstractmethod
+    def start_playing(self):
+        pass
 
 class DicePlayer(Player):
     ''' like a player but with dice specific stats for dice games'''
@@ -73,4 +76,31 @@ class DicePlayer(Player):
     def check_if_rolling(self):
         return self.isRolling
 
-    
+    def roll(self, numberOfDies=6):
+        if not self.diceRolling:
+            rollNum = numberOfDies
+        else:
+            rollNum = self.diceRolling
+        aRoll = ''
+        for die in range(rollNum):
+            aRoll = str(Die()) + ' ' + aRoll
+        self.currentRoll = aRoll[:]
+
+    def start_playing(self):    
+        '''
+        setup dice game related variables
+        '''
+        self.roundScore = 0
+        self.rollScore = 0
+        self.diceRolling = 6
+        self.diceHeld = 0
+        self.currentRoll = ''
+
+    def update_roll_num(self):
+        if self.diceRolling == 0:
+            self.diceRolling = 6
+        else:
+            self.diceRolling = self.diceRolling - self.diceHeld
+
+    def roll_again(self):
+        self.roll(self.diceRolling)

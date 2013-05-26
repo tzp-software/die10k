@@ -3,6 +3,9 @@
 '''
 from players import DicePlayer as Player
 
+ROLL_AGAIN = 'Would you like to roll again?\n(yes or no): '
+PICKUP = 'Would you iike to pick up any dice?\n(yes or no): '
+
 def ask_str(STR=None):
     if STR is None:
         q = 'what is your favorite color?'
@@ -31,14 +34,14 @@ def play_game(players):
         change_player()
         
     else:
-        if pickedUpNum == 6:
-            roll_again() # set pickedUpNum to 0
+        if players[0].diceHeld == 6:
+            players[0].roll_again() # set pickedUpNum to 0
         else:
-            update_roll_num()
+            players[0].update_roll_num()
             if not ask_bool(ROLL_AGAIN):
                 change_player()
             else:
-                roll_again()
+                players[0].roll_again()
 
 def ask_bool(question=None):
     if question is None:
